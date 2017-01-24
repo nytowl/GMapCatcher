@@ -119,10 +119,15 @@ class TilesRepositoryOSM(TilesRepository):
     #  We only have 2 levels for one axis
     # private
     def coord_to_path(self, tile_coord, layer):
+        if INVERTED_ZOOM :
+          zoom = str(MAP_MAX_ZOOM_LEVEL - tile_coord[2])
+        else :
+          zoom = str(tile_coord[2])
+
         return os.path.join(
                             self.configpath,
                             "OSM_" + LAYER_DIRS[layer],
-                            str(MAP_MAX_ZOOM_LEVEL - tile_coord[2]),
+                            zoom,
                             str(tile_coord[0]), str(tile_coord[1]) + ".png"
                            )
 
@@ -134,9 +139,13 @@ class TilesRepositoryOSM(TilesRepository):
     # private
     def coord_to_path_checkdirs(self, tile_coord, layer):
         self.lock.acquire()
+        if INVERTED_ZOOM :
+          zoom = MAP_MAX_ZOOM_LEVEL - tile_coord[2]
+        else :
+          zoom = tile_coord[2]
         path = os.path.join(self.configpath, "OSM_" + LAYER_DIRS[layer],)
         path = fileUtils.check_dir(path)
-        path = fileUtils.check_dir(path, '%d' % (MAP_MAX_ZOOM_LEVEL - tile_coord[2]))
+        path = fileUtils.check_dir(path, '%d' % zoom)
         path = fileUtils.check_dir(path, "%d" % (tile_coord[0]))
         self.lock.release()
         return os.path.join(path, "%d.png" % (tile_coord[1]))

@@ -16,7 +16,11 @@ except:
 
 
 def tiles_on_level(zoom_level):
-    return 1 << (MAP_MAX_ZOOM_LEVEL - int(zoom_level))
+    if INVERTED_ZOOM :
+        zoom = (MAP_MAX_ZOOM_LEVEL - int(zoom_level))
+    else :
+        zoom = int(zoom_level)
+    return 1 << zoom
 
 
 def tile_adjustEx(zoom_level, tile, offset):
@@ -114,7 +118,10 @@ def tilepath_bulk(tiles, size):
 
 ## Find scale of the picture in km per pixel
 def km_per_pixel(coord):
-    osm_zoom = MAP_MAX_ZOOM_LEVEL - coord[2]
+    if INVERTED_ZOOM :
+        osm_zoom = MAP_MAX_ZOOM_LEVEL - coord[2]
+    else :
+        osm_zoom = coord[2]
     S = ((2 * math.pi * R_EARTH) * math.cos(math.radians(coord[0]))) / (2 ** (osm_zoom + 8))
     return S
 

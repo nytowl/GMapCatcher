@@ -123,10 +123,15 @@ class TilesRepositoryMGMaps(TilesRepository):
     #  smaple of the Naming convention:
     #  \MGMapsCache\YahooMap_1\63\1_1.mgm
     def coord_to_path(self, tile_coord, layer):
+        if INVERTED_ZOOM :
+          zoom = str(MAP_MAX_ZOOM_LEVEL - tile_coord[2])
+        else :
+          zoom = str(tile_coord[2])
+
         return os.path.join(
             self.configpath,
             "Yahoo" + LAYER_NAMES[layer] +
-            "_" + str(MAP_MAX_ZOOM_LEVEL - tile_coord[2]),
+            "_" + zoom,
             self.calc_v2_hash(tile_coord[0], tile_coord[1]),
             str(tile_coord[0]) + "_" + str(tile_coord[1]) + ".mgm"
         )
@@ -134,11 +139,16 @@ class TilesRepositoryMGMaps(TilesRepository):
     ## create path if doesn't exists
     def coord_to_path_checkdirs(self, tile_coord, layer):
         self.lock.acquire()
+        if INVERTED_ZOOM :
+          zoom = str(MAP_MAX_ZOOM_LEVEL - tile_coord[2])
+        else :
+          zoom = str(tile_coord[2])
+
         path = fileUtils.check_dir(self.configpath)
         path = fileUtils.check_dir(
             path,
             "Yahoo" + LAYER_NAMES[layer] +
-            "_" + str(MAP_MAX_ZOOM_LEVEL - tile_coord[2])
+            "_" + zoom
         )
         path = fileUtils.check_dir(
             path, self.calc_v2_hash(tile_coord[0], tile_coord[1])

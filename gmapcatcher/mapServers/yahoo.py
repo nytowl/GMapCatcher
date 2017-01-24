@@ -1,7 +1,7 @@
 ## @package gmapcatcher.mapServers.yahoo
 # All the interaction with yahoo.com
 
-from gmapcatcher.mapConst import MAP_MAX_ZOOM_LEVEL, LAYER_MAP, LAYER_SAT, LAYER_HYB
+from gmapcatcher.mapConst import MAP_MAX_ZOOM_LEVEL, LAYER_MAP, LAYER_SAT, LAYER_HYB, INVERTED_ZOOM
 
 
 ## Returns a template URL for the Yahoo mas
@@ -17,8 +17,12 @@ def layer_url_template(layer):
 ## Returns the URL to the Yahoo map tile
 def get_url(counter, coord, layer, conf):
     #server = ['a', 'b', 'c']
+    if INVERTED_ZOOM :
+        zoom = MAP_MAX_ZOOM_LEVEL - coord[2] 
+    else :
+        zoom = coord[2]
     return layer_url_template(layer) % (
             coord[0],
-            (((1 << (MAP_MAX_ZOOM_LEVEL - coord[2])) >> 1) - 1 - coord[1]),
+            (((1 << (zoom)) >> 1) - 1 - coord[1]),
             coord[2] + 1
         )

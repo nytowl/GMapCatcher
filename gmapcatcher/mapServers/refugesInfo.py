@@ -14,7 +14,7 @@
 # hiking   Both layers combined in a JPEG
 
 
-from gmapcatcher.mapConst import MAP_MAX_ZOOM_LEVEL
+from gmapcatcher.mapConst import MAP_MAX_ZOOM_LEVEL, INVERTED_ZOOM
 
 
 ## Returns a template URL for the Stamen
@@ -25,5 +25,9 @@ def layer_url_template():
 ## Returns the URL to the Stamen tile
 def get_url(counter, coord, layer, conf):
     # server = ['', 'a.', 'b.', 'c.', 'd.']
+    if INVERTED_ZOOM :
+        zoom = MAP_MAX_ZOOM_LEVEL - coord[2]
+    else :
+        zoom = coord[2]
     return layer_url_template() % (layer,
-                MAP_MAX_ZOOM_LEVEL - coord[2], coord[0], coord[1])
+                zoom, coord[0], coord[1])

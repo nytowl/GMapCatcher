@@ -22,5 +22,9 @@ def layer_url_template(counter, layer, conf):
 ## Returns the URL to the Eniro tile
 def get_url(counter, coord, layer, conf):
     template = layer_url_template(counter, layer, conf)
+    if INVERTED_ZOOM :
+        zoom = MAP_MAX_ZOOM_LEVEL - coord[2]
+    else :
+        zoom = coord[2]
     if template:
-        return template % (layer_names[layer], MAP_MAX_ZOOM_LEVEL - coord[2], coord[0], coord[1])
+        return template % (layer_names[layer], zoom, coord[0], coord[1])

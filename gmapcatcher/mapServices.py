@@ -173,7 +173,10 @@ class MapServ:
     #  returns tile coords if successfully retrieved
     def get_tile(self, tcoord, layer, online, force_update, conf):
         if (MAP_MIN_ZOOM_LEVEL <= tcoord[2] <= MAP_MAX_ZOOM_LEVEL):
-            world_tiles = 2 ** (MAP_MAX_ZOOM_LEVEL - tcoord[2])
+            if INVERTED_ZOOM :
+                world_tiles = 2 ** (MAP_MAX_ZOOM_LEVEL - tcoord[2])
+            else :
+                world_tiles = 2 ** tcoord[2]
             if (tcoord[0] > world_tiles) or (tcoord[1] > world_tiles):
                 return None
             if self.tile_repository.get_png_file(tcoord, layer, online,

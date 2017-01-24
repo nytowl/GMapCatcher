@@ -12,5 +12,9 @@ def layer_url_template():
 ## Returns the URL to the OpenCycleMap tile
 def get_url(counter, coord, layer, conf):
     server = ['a', 'b', 'c']
+    if INVERTED_ZOOM :
+        zoom = MAP_MAX_ZOOM_LEVEL - coord[2]
+    else :
+        zoom = coord[2]
     return layer_url_template() % (server[counter % 3],
-                MAP_MAX_ZOOM_LEVEL - coord[2], coord[0], coord[1])
+                zoom, coord[0], coord[1])

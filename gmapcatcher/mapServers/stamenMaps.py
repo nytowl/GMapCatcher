@@ -6,7 +6,7 @@
 # See http://maps.stamen.com/ for deatails.
 #
 
-from gmapcatcher.mapConst import MAP_MAX_ZOOM_LEVEL
+from gmapcatcher.mapConst import MAP_MAX_ZOOM_LEVEL, INVERTED_ZOOM
 
 
 ## Returns a template URL for the Stamen
@@ -17,6 +17,10 @@ def layer_url_template():
 ## Returns the URL to the Stamen tile
 def get_url(counter, coord, layer, conf):
     server = ['a', 'b', 'c', 'd']
+    if INVERTED_ZOOM :
+        zoom = MAP_MAX_ZOOM_LEVEL - coord[2]
+    else :
+        zoom = coord[2]
     stamen_layers = ['watercolor', 'toner', 'terrain']
     return layer_url_template() % (server[counter % 5], stamen_layers[layer],
-                MAP_MAX_ZOOM_LEVEL - coord[2], coord[0], coord[1])
+                zoom, coord[0], coord[1])
